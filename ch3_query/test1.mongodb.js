@@ -62,7 +62,7 @@ db.inventory.find({ tags: { $nin: ["blank", "blue"] } });
 
 db.inventory.find({ tags: { $in: [/^[a-z]*d/] } });
 
-db.inventory.find({ tags: { $in: [/^b/] } });
+db.inventory.find({ tags: { $in: [/^b/] } }); //^b : 시작이 b로 하는 것
 
 db.inventory.find({ qty: { $not: { $gt: 50 } } });
 
@@ -126,3 +126,36 @@ db.by_month.find({
     { month_data: { $elemMatch: { month: "02월", death_toll: 0 } } },
   ],
 });
+
+//  $all
+// 순서가 중요함
+db.inventory.find({ tags: ["red", "blank"] });
+db.inventory.find({ tags: ["blank", "red"] });
+// $all을 쓰면 "red", "blank" 순서와 상관 없이 해당 요소가 있는지만 확인
+db.inventory.find({ tags: { $all: ["red", "blank"] } });
+
+//  $size
+db.collection.find({ tags: { $size: 5 } }); //배열 lenth가 5인 문서
+
+//  $slice
+
+// {item: "book", tags: ["red", "blank"]}
+// 잘못됨. tags의 첫번째 인자[0]가 아니라 tags 배열의 0이란 원소를 출력하라는 의미
+db.collection.find({}, { "tags.10": 1 });
+
+// tags 배열의 [0], [1]을 출력하라 (앞에서 부터 2개를 출력하라)
+db.collection.find({}, { tags: { $slice: 2 } });
+
+// tags 배열의 [2:3] 을 출력하라
+// $slice: [2, 3] :  2: 인덱스 번호, 3: 배열 요소 갯수
+db.collection.find({}, { tags: { $slice: [2, 3] } });
+
+// $elemMatch
+
+// #특정 조건에 부합하는 필드만 출력하라
+// 확인 필요.
+db.inventory.find({}, { tags:{$elemMatch: { $regex: /^b/ } },_id:0, item:0, qty:0});
+
+// $ 연산자
+// #특정 조건에 부합하는 첫번째 데이터만 출력하라
+db.inventory.find({ tags: "red" }, { "tags.$": true });
