@@ -154,7 +154,17 @@ db.collection.find({}, { tags: { $slice: [2, 3] } });
 
 // #특정 조건에 부합하는 필드만 출력하라
 // 확인 필요.
-db.inventory.find({}, { tags:{$elemMatch: { $regex: /^b/ } },_id:0, item:0, qty:0});
+db.inventory.find(
+  {},
+  { tags: { $elemMatch: { $regex: /^b/ } }, _id: 0, item: 0, qty: 0 }
+);
+
+db.inventory.find({}, { tags: { $elemMatch: { $regex: /^b/ } } });
+
+db.inventory.find(
+  {},
+  { tags: { $elemMatch: { $regex: /^b/ } }, qty: 1, item: 1 }
+);
 
 // $ 연산자
 // #특정 조건에 부합하는 첫번째 데이터만 출력하라
