@@ -643,6 +643,7 @@ $bucket 스테이지는
 //p165 고급스테이지 bucket 
 //필드의 범위에 따라서 그룹화
 // group 필드 값으로 그룹화를 했음.
+
 db.rating.aggregate([
   {
     $bucket: {
